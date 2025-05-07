@@ -3,6 +3,7 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/.idea/InSecurity.iml" filepath="$PROJECT_DIR$/.idea/InSecurity.iml" />
+      <module fileurl="file://$PROJECT_DIR$/authify/authify.iml" filepath="$PROJECT_DIR$/authify/authify.iml" />
     </modules>
   </component>
 </project>
