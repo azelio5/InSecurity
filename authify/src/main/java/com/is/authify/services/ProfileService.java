@@ -5,4 +5,5 @@ import com.is.authify.io.ProfileResponse;
 
 public interface ProfileService {
     ProfileResponse createProfile(ProfileRequest profileRequest);
+
 }
