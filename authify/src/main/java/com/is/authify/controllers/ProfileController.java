@@ -22,4 +22,9 @@ public class ProfileController {
         //TODO: welcome email
         return response;
     }
+
+    @GetMapping("/test")
+    public String test(){
+        return "Auth is working";
+    }
 }
