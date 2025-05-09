@@ -20,13 +20,13 @@ public class JwtUtil {
     private String SECRET_KEY;
 
     public String generateToken(UserDetails userDetails) {
-        Map<String, Object> cliams = new HashMap<>();
-        return createToken(cliams, userDetails.getUsername());
+        Map<String, Object> claims = new HashMap<>();
+        return createToken(claims, userDetails.getUsername());
     }
 
-    private String createToken(Map<String, Object> cliams, String email) {
+    private String createToken(Map<String, Object> claims, String email) {
         return Jwts.builder()
-                .setClaims(cliams)
+                .setClaims(claims)
                 .setSubject(email)
                 .setIssuedAt(new Date(System.currentTimeMillis()))
                 .setExpiration(new Date(System.currentTimeMillis() + 1000 * 60 * 60 * 10)) //10  hour expiration

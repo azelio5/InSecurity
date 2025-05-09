@@ -38,7 +38,7 @@ public class JwtRequestFilter extends OncePerRequestFilter {
         }
 
         String jwt = null;
-        String email = null;
+        String email;
 
         //1. check the authorization header
         final String authorizationHeader = request.getHeader("Authorization");
