@@ -9,7 +9,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/api/v1.0")
+//@RequestMapping("/api/v1.0") from prop
 @RequiredArgsConstructor
 public class ProfileController {
 
