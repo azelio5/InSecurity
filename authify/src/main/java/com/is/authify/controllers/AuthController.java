@@ -1,6 +1,7 @@
 package com.is.authify.controllers;
 
 import com.is.authify.io.AuthRequest;
+import com.is.authify.services.AppUserDetailsService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -8,6 +9,7 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.DisabledException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
@@ -20,12 +22,14 @@ import java.util.Map;
 public class AuthController {
 
     private final AuthenticationManager authenticationManager;
+    private final AppUserDetailsService userDetailsService;
 
 
     @PostMapping("/login")
     public ResponseEntity<?> login(@RequestBody final AuthRequest authRequest) {
         try {
             authenticate(authRequest.getEmail(), authRequest.getPassword());
+            UserDetails userDetails = userDetailsService.loadUserByUsername(authRequest.getEmail());
 
         } catch (BadCredentialsException e) {
             Map<String, Object> errors = new HashMap<>();
