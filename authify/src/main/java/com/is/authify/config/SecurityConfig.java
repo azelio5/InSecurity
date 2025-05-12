@@ -40,9 +40,9 @@ public class SecurityConfig {
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/login",
                                 "/register",
-                                "send-reset-otp",
-                                "reset-password",
-                                "logout").permitAll().anyRequest().authenticated())
+                                "/send-reset-otp",
+                                "/reset-password",
+                                "/logout").permitAll().anyRequest().authenticated())
                 .sessionManagement(
                         session -> session
                                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS))
