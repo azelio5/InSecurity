@@ -12,7 +12,7 @@ POST http://localhost:8080/api/v1.0/login
 Content-Type: application/json
 
 {
-  "email": "a.alakbarov@gmail.com",
+  "email": "azgangsta@gmail.com",
   "password": "123456"
 }
 
@@ -21,7 +21,7 @@ GET http://localhost:8080/api/v1.0/test
 
 ###
 
-GET http://localhost:8080/api/v1.0/profile
+GET http://localhost:8080/api/v1.0/is-authenticated
 
 ###
 

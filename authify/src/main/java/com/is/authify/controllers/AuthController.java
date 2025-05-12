@@ -78,6 +78,10 @@ public class AuthController {
     public ResponseEntity<Boolean> isAuthenticated(
             @CurrentSecurityContext(expression = "authentication.name") String email) {
         return ResponseEntity.ok(email != null);
+    }
+
+    @GetMapping("reset-password")
+    public ResponseEntity<?> resetPassword(){
 
     }
 }
