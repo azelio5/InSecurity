@@ -8,4 +8,6 @@ public interface ProfileService {
 
     ProfileResponse getProfile(String email);
 
+    void setResetOTO(String email);
+
 }

@@ -11,7 +11,9 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.util.Optional;
 import java.util.UUID;
+import java.util.concurrent.ThreadLocalRandom;
 
 @Service
 @RequiredArgsConstructor
@@ -37,6 +39,33 @@ public class ProfileServiceImpl implements ProfileService {
                 orElseThrow(() -> new UsernameNotFoundException("User not found with email: " + email));
 
         return convertToProfileResponse(existingUser);
+    }
+
+    @Override
+    public void setResetOTO(String email) {
+        UserEntity existingUser = repository.findByEmail(email).
+                orElseThrow(() -> new UsernameNotFoundException("User not found with email: " + email));
+        //Generate 6 digit OTP
+
+        String otp = String.valueOf(ThreadLocalRandom.current().nextInt(10000, 1000000));
+
+        //Calculate expiring time (current time + 15 minutes in milliseconds)
+        long expiringTime = System.currentTimeMillis() + (15 * 60 * 1000);
+
+        //update profile entity
+        existingUser.setResetOtp(otp);
+        existingUser.setResetOtpExpireAt(expiringTime);
+
+        //save to DB
+
+        repository.save(existingUser);
+
+        try {
+            //TODO send the reset OTP otp
+        } catch (Exception e) {
+            throw new RuntimeException("Unable to sent an email");
+        }
+
     }
 
     private ProfileResponse convertToProfileResponse(UserEntity newProfile) {
