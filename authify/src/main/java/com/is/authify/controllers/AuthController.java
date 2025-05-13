@@ -3,6 +3,7 @@ package com.is.authify.controllers;
 import com.is.authify.io.AuthRequest;
 import com.is.authify.io.AuthResponse;
 import com.is.authify.services.AppUserDetailsService;
+import com.is.authify.services.ProfileService;
 import com.is.authify.util.JwtUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.*;
@@ -12,10 +13,8 @@ import org.springframework.security.authentication.DisabledException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.annotation.CurrentSecurityContext;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.time.Duration;
 import java.util.HashMap;
@@ -28,6 +27,7 @@ public class AuthController {
     private final AuthenticationManager authenticationManager;
     private final AppUserDetailsService userDetailsService;
     private final JwtUtil jwtUtil;
+    private final ProfileService profileService;
 
 
     @PostMapping("/login")
@@ -80,8 +80,17 @@ public class AuthController {
         return ResponseEntity.ok(email != null);
     }
 
-    @GetMapping("reset-password")
-    public ResponseEntity<?> resetPassword(){
+//    @GetMapping("reset-password")
+//    public ResponseEntity<?> resetPassword(){
+//
+//    }
 
+    @PostMapping("/send-reset-otp")
+    public void sendResetOtp(@RequestParam String email){
+        try {
+            profileService.setResetOTO(email);
+        }catch (Exception e){
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, e.getMessage());
+        }
     }
 }
