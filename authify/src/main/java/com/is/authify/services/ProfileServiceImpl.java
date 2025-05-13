@@ -11,7 +11,6 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
-import java.util.Optional;
 import java.util.UUID;
 import java.util.concurrent.ThreadLocalRandom;
 
@@ -86,6 +85,45 @@ public class ProfileServiceImpl implements ProfileService {
 
         repository.save(existingUser);
 
+    }
+
+    @Override
+    public void sendOTP(String email) {
+        UserEntity existingUser = repository.findByEmail(email).orElseThrow(()
+                -> new UsernameNotFoundException("User not found with email: " + email));
+        if (existingUser.getIsAccountVerified() != null && existingUser.getIsAccountVerified()) {
+            return;
+        }
+
+        //Generate 6 digit OTP
+
+        String otp = String.valueOf(ThreadLocalRandom.current().nextInt(10000, 1000000));
+
+        //Calculate expiring time (current time + 24 hours in milliseconds)
+        long expiringTime = System.currentTimeMillis() + (24 * 60 * 60 * 1000); //24 h
+
+        //Update UE
+        existingUser.setVerifyOtp(otp);
+        existingUser.setVerifyOtpExpireAt(expiringTime);
+
+        //Save to DB
+
+        repository.save(existingUser);
+
+
+    }
+
+    @Override
+    public void verifyOtp(String email, String otp) {
+
+    }
+
+    @Override
+    public String getLoggedInUserId(String email) {
+        UserEntity existingUser = repository.findByEmail(email).orElseThrow(()
+                -> new UsernameNotFoundException("User not found with email: " + email));
+
+        return existingUser.getUserId();
     }
 
     private ProfileResponse convertToProfileResponse(UserEntity newProfile) {
