@@ -13,7 +13,7 @@ Content-Type: application/json
 
 {
   "email": "azgangsta@gmail.com",
-  "password": "123456"
+  "password": "654321"
 }
 
 ###
@@ -22,6 +22,23 @@ GET http://localhost:8080/api/v1.0/test
 ###
 
 GET http://localhost:8080/api/v1.0/is-authenticated
+
+###
+
+POST http://localhost:8080/api/v1.0/send-reset-otp?
+    email=azgangsta@gmail.com
+
+###
+
+POST http://localhost:8080/api/v1.0/reset-password
+Content-Type: application/json
+
+{
+  "email": "azgangsta@gmail.com",
+  "otp": "737709",
+  "newPassword": "654321"
+}
+###
 
 ###
 

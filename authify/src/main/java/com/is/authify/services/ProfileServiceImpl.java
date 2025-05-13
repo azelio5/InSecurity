@@ -43,7 +43,7 @@ public class ProfileServiceImpl implements ProfileService {
     }
 
     @Override
-    public void setResetOTO(String email) {
+    public void sendResetOTO(String email) {
         UserEntity existingUser = repository.findByEmail(email).
                 orElseThrow(() -> new UsernameNotFoundException("User not found with email: " + email));
         //Generate 6 digit OTP
@@ -65,6 +65,27 @@ public class ProfileServiceImpl implements ProfileService {
         } catch (Exception e) {
             throw new RuntimeException("Unable to sent an email");
         }
+    }
+
+    @Override
+    public void resetPassword(String email, String otp, String newPassword) {
+        UserEntity existingUser = repository.findByEmail(email).orElseThrow(()
+                -> new UsernameNotFoundException("User not found with email: " + email));
+        if (existingUser.getResetOtp() == null || !existingUser.getResetOtp().equals(otp)) {
+            throw new ResponseStatusException(HttpStatus.CONFLICT, "Invalid OTP");
+        }
+        if (existingUser.getResetOtpExpireAt() < System.currentTimeMillis()) {
+            throw new RuntimeException("OTP expired");
+        }
+
+        existingUser.setPassword(passwordEncoder.encode(newPassword));
+
+        existingUser.setResetOtp(null);
+
+        existingUser.setResetOtpExpireAt(0L);
+
+        repository.save(existingUser);
+
     }
 
     private ProfileResponse convertToProfileResponse(UserEntity newProfile) {
@@ -89,4 +110,6 @@ public class ProfileServiceImpl implements ProfileService {
                 .resetOtp(null)
                 .build();
     }
+
+
 }

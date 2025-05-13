@@ -2,9 +2,11 @@ package com.is.authify.controllers;
 
 import com.is.authify.io.AuthRequest;
 import com.is.authify.io.AuthResponse;
+import com.is.authify.io.ResetPasswordRequest;
 import com.is.authify.services.AppUserDetailsService;
 import com.is.authify.services.ProfileService;
 import com.is.authify.util.JwtUtil;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.*;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -80,16 +82,22 @@ public class AuthController {
         return ResponseEntity.ok(email != null);
     }
 
-//    @GetMapping("reset-password")
-//    public ResponseEntity<?> resetPassword(){
-//
-//    }
+    @PostMapping("/reset-password")
+    public void resetPassword(@Valid @RequestBody ResetPasswordRequest resetPasswordRequest) {
+        try {
+            profileService.resetPassword(resetPasswordRequest.getEmail(),
+                    resetPasswordRequest.getOtp(),
+                    resetPasswordRequest.getNewPassword());
+        } catch (Exception e) {
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, e.getMessage());
+        }
+    }
 
     @PostMapping("/send-reset-otp")
-    public void sendResetOtp(@RequestParam String email){
+    public void sendResetOtp(@RequestParam String email) {
         try {
-            profileService.setResetOTO(email);
-        }catch (Exception e){
+            profileService.sendResetOTO(email);
+        } catch (Exception e) {
             throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, e.getMessage());
         }
     }
