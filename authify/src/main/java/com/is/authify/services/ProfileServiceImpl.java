@@ -60,7 +60,7 @@ public class ProfileServiceImpl implements ProfileService {
         repository.save(existingUser);
 
         try {
-            emailService.sendResetOTPEmail(existingUser.getEmail(), otp);
+            emailService.sendResetOtpEmail(existingUser.getEmail(), otp);
         } catch (Exception e) {
             throw new RuntimeException("Unable to sent an email");
         }
@@ -110,7 +110,7 @@ public class ProfileServiceImpl implements ProfileService {
         repository.save(existingUser);
 
         try {
-            emailService.sendOtpMail(existingUser.getEmail(), otp);
+            emailService.sendOtpEmail(existingUser.getEmail(), otp);
         } catch (Exception e) {
             throw new RuntimeException("Unable to sent an email");
         }
