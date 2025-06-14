@@ -135,13 +135,6 @@ public class ProfileServiceImpl implements ProfileService {
         repository.save(existingUser);
     }
 
-    @Override
-    public String getLoggedInUserId(String email) {
-        UserEntity existingUser = repository.findByEmail(email).orElseThrow(()
-                -> new UsernameNotFoundException("User not found with email: " + email));
-
-        return existingUser.getUserId();
-    }
 
     private ProfileResponse convertToProfileResponse(UserEntity newProfile) {
         return ProfileResponse.builder()
